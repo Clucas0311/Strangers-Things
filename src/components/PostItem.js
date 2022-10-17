@@ -5,8 +5,8 @@ const PostItem = ({ post }) => {
   console.log("post", post);
   return (
     <Card>
-      <div className="title">Title: {post.title}</div>
-      <div className="description">Description: {post.description}</div>
+      <h1>{post.title}</h1>
+      <h4 className="description">Description: {post.description}</h4>
       <div className="seller">{post.seller}</div>
       <div className="location">{post.location}</div>
     </Card>
