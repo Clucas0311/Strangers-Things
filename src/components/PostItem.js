@@ -7,7 +7,6 @@ const PostItem = ({ post }) => {
     <Card>
       <h1>{post.title}</h1>
       <h4 className="description">Description: {post.description}</h4>
-      <div className="seller">{post.seller}</div>
       <div className="location">{post.location}</div>
     </Card>
   );

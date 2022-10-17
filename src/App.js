@@ -5,6 +5,7 @@ import "./App.css";
 
 const App = () => {
   const [posts, setPosts] = useState([]);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -21,8 +22,8 @@ const App = () => {
 
   return (
     <div className="container">
+      <SignUp setToken={setToken} />
       <PostList posts={posts} />
-      <SignUp />
     </div>
   );
 };

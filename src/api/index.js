@@ -15,13 +15,9 @@ export const registerUser = async (username, password) => {
         },
       }),
     });
-    if (response.ok) {
-      const data = await response.json();
-      console.log("------------->data-------------->", data);
-      return data;
-    } else {
-      throw error;
-    }
+    const data = await response.json();
+    console.log("------------->data-------------->", data);
+    return data;
   } catch (error) {
     console.error("There was an error registering user", error);
   }
