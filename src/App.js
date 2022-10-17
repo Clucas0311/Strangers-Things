@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BASE_URL } from "./api";
-import { Posts, Loading } from "./components";
+import { PostList, SignUp } from "./components";
+import "./App.css";
 
 const App = () => {
   const [posts, setPosts] = useState([]);
@@ -19,8 +20,9 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <Posts posts={posts} />
+    <div className="container">
+      <PostList posts={posts} />
+      <SignUp />
     </div>
   );
 };
