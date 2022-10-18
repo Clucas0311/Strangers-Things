@@ -3,11 +3,11 @@ import { registerUser } from "../api";
 import { useParams } from "react-router-dom";
 
 const SignUp = ({ setToken }) => {
+  const { action } = useParams();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const params = useParams();
-  console.log("params", params);
+  console.log("action", action);
 
   const usernameChangeHandler = (event) => setUserName(event.target.value);
   const passwordChangeHandler = (event) => setPassword(event.target.value);
@@ -20,9 +20,10 @@ const SignUp = ({ setToken }) => {
     localStorage.setItem("token", data.token);
     console.log("data", data);
   };
-
+  const title = action === "login" ? "Log In" : "Sign Up";
   return (
     <div className="ui form" onSubmit={onSubmitHandler}>
+      <h1>{title}</h1>
       <div className="field">
         <label>Username</label>
         <input
@@ -45,7 +46,7 @@ const SignUp = ({ setToken }) => {
         />
       </div>
       <button className="ui button" type="submit">
-        Sign Up
+        {title}
       </button>
     </div>
   );
