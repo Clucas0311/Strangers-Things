@@ -36,7 +36,7 @@ const App = () => {
           <Link className="item" to="/account/login">
             Log In
           </Link>
-          <Link className="item" to="/account/signup">
+          <Link className="item" to="/account/register">
             Sign up
           </Link>
         </div>
@@ -45,7 +45,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route
-          path="/account/signup"
+          path="/account/:action"
           element={<AccountForm setToken={setToken} />}
         />
         <Route path="/posts" element={<PostList posts={posts} />} />

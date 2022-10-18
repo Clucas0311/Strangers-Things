@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { registerUser } from "../api";
+import { useParams } from "react-router-dom";
 
 const SignUp = ({ setToken }) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  const params = useParams();
+  console.log("params", params);
 
   const usernameChangeHandler = (event) => setUserName(event.target.value);
   const passwordChangeHandler = (event) => setPassword(event.target.value);
@@ -35,7 +39,7 @@ const SignUp = ({ setToken }) => {
           type="password"
           value={password}
           placeholder="password"
-          minlength="8"
+          minLength="8"
           required
           onChange={passwordChangeHandler}
         />
