@@ -1,14 +1,19 @@
 import React from "react";
-import Card from "./shared/Card";
+import { Card } from "semantic-ui-react";
 
 const PostItem = ({ post }) => {
   console.log("post", post);
   return (
-    <Card>
-      <h1>{post.title}</h1>
-      <h4 className="description">Description: {post.description}</h4>
-      <div className="location">{post.location}</div>
-    </Card>
+    <Card.Group>
+      <Card>
+        <Card.Content>
+          <Card.Header content={post.title} />
+        </Card.Content>
+        <Card.Content>
+          <Card.Description>{post.description}</Card.Description>
+        </Card.Content>
+      </Card>
+    </Card.Group>
   );
 };
 
