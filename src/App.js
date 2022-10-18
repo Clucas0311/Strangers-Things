@@ -29,7 +29,9 @@ const App = () => {
         <Link className="item" to="/">
           Home
         </Link>
-
+        <Link className="item" to="/posts">
+          Posts
+        </Link>
         <div className="right menu">
           <Link className="item" to="/account/login">
             Log In

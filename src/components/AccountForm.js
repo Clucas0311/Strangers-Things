@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { registerUser } from "../api";
-import { Button, Form } from "semantic-ui-react";
 
 const SignUp = ({ setToken }) => {
   const [username, setUserName] = useState("");
@@ -19,8 +18,9 @@ const SignUp = ({ setToken }) => {
   };
 
   return (
-    <Form onSubmit={onSubmitHandler}>
-      <Form.Field>
+    <div className="ui form" onSubmit={onSubmitHandler}>
+      <div className="field">
+        <label>Username</label>
         <input
           type="text"
           value={username}
@@ -28,8 +28,9 @@ const SignUp = ({ setToken }) => {
           required
           onChange={usernameChangeHandler}
         />
-      </Form.Field>
-      <Form.Field>
+      </div>
+      <div className="field">
+        <label>Password</label>
         <input
           type="password"
           value={password}
@@ -38,9 +39,11 @@ const SignUp = ({ setToken }) => {
           required
           onChange={passwordChangeHandler}
         />
-      </Form.Field>
-      <Button type="submit">Sign Up</Button>
-    </Form>
+      </div>
+      <button className="ui button" type="submit">
+        Sign Up
+      </button>
+    </div>
   );
 };
 

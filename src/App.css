@@ -6,7 +6,7 @@
   
   body {
     font-family: 'Poppins', sans-serif;
-    background-color: #202142;
+    background-color: #d6d7e2;
     color: #fff;
     line-height: 1.6;
   }
@@ -32,7 +32,7 @@
   
   .card {
     background-color: #fff;
-    color: #333;
+    color: rgb(247, 243, 243);
     border-radius: 15px;
     padding: 40px 50px;
     margin: 20px 0;
