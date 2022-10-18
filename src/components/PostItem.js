@@ -1,19 +1,22 @@
 import React from "react";
-import { Card } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const PostItem = ({ post }) => {
   console.log("post", post);
   return (
-    <Card.Group>
-      <Card>
-        <Card.Content>
-          <Card.Header content={post.title} />
-        </Card.Content>
-        <Card.Content>
-          <Card.Description>{post.description}</Card.Description>
-        </Card.Content>
-      </Card>
-    </Card.Group>
+    <div className="ui card">
+      <div className="content">
+        <div className="center aligned header">{post.title}</div>
+        <div className="center aligned description">
+          <p>{post.description}</p>
+        </div>
+        <div className="extra-content">
+          <div className="center aligned header">
+            <Link to="">View Location</Link>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

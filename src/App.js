@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BASE_URL, fetchPosts } from "./api";
-import { PostList, SignUp, Home } from "./components";
+import { fetchPosts } from "./api";
+import { PostList, AccountForm, Home } from "./components";
 import { Routes, Route, Link } from "react-router-dom";
-import { Menu } from "semantic-ui-react";
 
 import "./App.css";
 
@@ -30,19 +29,22 @@ const App = () => {
         <Link className="item" to="/">
           Home
         </Link>
-        <Link className="item" to="/account/login">
-          Log In
-        </Link>
-        <Link className="item" to="/account/signup">
-          Sign up
-        </Link>
+
+        <div className="right menu">
+          <Link className="item" to="/account/login">
+            Log In
+          </Link>
+          <Link className="item" to="/account/signup">
+            Sign up
+          </Link>
+        </div>
       </nav>
 
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route
           path="/account/signup"
-          element={<SignUp setToken={setToken} />}
+          element={<AccountForm setToken={setToken} />}
         />
         <Route path="/posts" element={<PostList posts={posts} />} />
       </Routes>
