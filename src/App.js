@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { BASE_URL } from "./api";
-import { PostList, SignUp } from "./components";
+import { BASE_URL, fetchPosts } from "./api";
+import { PostList, SignUp, Home } from "./components";
+import { Routes, Route, Link } from "react-router-dom";
+import { Menu } from "semantic-ui-react";
+
 import "./App.css";
 
 const App = () => {
@@ -8,22 +11,41 @@ const App = () => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const getPosts = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/posts`);
-        const { data } = await response.json();
-        setPosts(data.posts);
+        const result = await fetchPosts();
+        setPosts(result);
       } catch (error) {
         console.error("There was an error fetching posts", error);
       }
     };
-    fetchPosts();
+    getPosts();
   }, []);
+
+  console.log("THIS IS POSTS", posts);
 
   return (
     <div className="container">
-      <SignUp setToken={setToken} />
-      <PostList posts={posts} />
+      <nav className="ui secondary menu">
+        <Link className="item" to="/">
+          Home
+        </Link>
+        <Link className="item" to="/account/login">
+          Log In
+        </Link>
+        <Link className="item" to="/account/signup">
+          Sign up
+        </Link>
+      </nav>
+
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route
+          path="/account/signup"
+          element={<SignUp setToken={setToken} />}
+        />
+        <Route path="/posts" element={<PostList posts={posts} />} />
+      </Routes>
     </div>
   );
 };
