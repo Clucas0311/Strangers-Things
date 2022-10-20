@@ -7,7 +7,9 @@ import "./App.css";
 
 const App = () => {
   const [posts, setPosts] = useState([]);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(
+    window.localStorage.getItem("token") || ""
+  );
 
   useEffect(() => {
     const getPosts = async () => {
@@ -21,7 +23,9 @@ const App = () => {
     getPosts();
   }, []);
 
-  console.log("THIS IS POSTS", posts);
+  useEffect(() => {
+    window.localStorage.setItem("token", token);
+  }, [token]);
 
   return (
     <div className="container">

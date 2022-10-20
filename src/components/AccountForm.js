@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { registerUser } from "../api";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const SignUp = ({ setToken }) => {
   const { action } = useParams();
+  const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,16 +14,23 @@ const SignUp = ({ setToken }) => {
   const passwordChangeHandler = (event) => setPassword(event.target.value);
 
   const onSubmitHandler = async (event) => {
+    console.log("SUBMIT");
     event.preventDefault();
-    console.log("username", username, "password", password);
-    const { data } = await registerUser(username, password);
-    setToken(data.token);
-    localStorage.setItem("token", data.token);
-    console.log("data", data);
+    try {
+      console.log("username", username, "password", password);
+      const { data } = await registerUser(username, password);
+
+      setToken(data.token);
+      navigate("/");
+
+      console.log("data", data);
+    } catch (error) {
+      console.error(error);
+    }
   };
   const title = action === "login" ? "Log In" : "Sign Up";
   return (
-    <div className="ui form" onSubmit={onSubmitHandler}>
+    <form className="ui form" onSubmit={onSubmitHandler}>
       <h1>{title}</h1>
       <div className="field">
         <label>Username</label>
@@ -48,7 +56,7 @@ const SignUp = ({ setToken }) => {
       <button className="ui button" type="submit">
         {title}
       </button>
-    </div>
+    </form>
   );
 };
 
