@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { fetchPosts } from "./api";
+import { fetchPosts, fetchGuest } from "./api";
 import { PostList, AccountForm, Home } from "./components";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import "./App.css";
 
@@ -10,6 +10,9 @@ const App = () => {
   const [token, setToken] = useState(
     window.localStorage.getItem("token") || ""
   );
+  const [guest, setGuest] = useState(null);
+  const navigate = useNavigate();
+  console.log("guest---->", guest);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -22,6 +25,23 @@ const App = () => {
     };
     getPosts();
   }, []);
+
+  const logOut = () => {
+    setToken("");
+    setGuest(null);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (token) {
+      const getGuest = async () => {
+        const { username } = await fetchGuest(token);
+        console.log("username", username);
+        setGuest(username);
+      };
+      getGuest();
+    }
+  }, [token]);
 
   useEffect(() => {
     window.localStorage.setItem("token", token);
@@ -37,17 +57,25 @@ const App = () => {
           Posts
         </Link>
         <div className="right menu">
-          <Link className="item" to="/account/login">
-            Log In
-          </Link>
-          <Link className="item" to="/account/register">
-            Sign up
-          </Link>
+          {token ? (
+            <button className="item" onClick={logOut}>
+              Log Out
+            </button>
+          ) : (
+            <>
+              <Link className="item" to="/account/login">
+                Log In
+              </Link>
+              <Link className="item" to="/account/register">
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route exact path="/" element={<Home guest={guest} />} />
         <Route
           path="/account/:action"
           element={<AccountForm setToken={setToken} />}
