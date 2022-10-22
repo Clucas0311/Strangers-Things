@@ -47,3 +47,35 @@ export const fetchGuest = async (token) => {
     console.log(error);
   }
 };
+
+export const fetchCreatePost = async (
+  token,
+  title,
+  description,
+  price,
+  willDeliver
+) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        post: {
+          title,
+          description,
+          price,
+          willDeliver,
+        },
+      }),
+    });
+    console.log("THIS IS THE ADD POST RESPONSE --->", response);
+    const { data } = await response.json();
+    console.log("THIS IS THE ADD POST DATA --> ", data);
+    return data;
+  } catch (error) {
+    console.error("There was an error adding post", error);
+  }
+};

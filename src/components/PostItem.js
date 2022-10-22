@@ -9,6 +9,7 @@ const PostItem = ({ post }) => {
         <div className="center aligned header">{post.title}</div>
         <div className="center aligned description">
           <p>{post.description}</p>
+          <p>{post.price}</p>
         </div>
         <div className="extra-content">
           <div className="center aligned header">

@@ -80,7 +80,10 @@ const App = () => {
           path="/account/:action"
           element={<AccountForm setToken={setToken} />}
         />
-        <Route path="/posts" element={<PostList posts={posts} />} />
+        <Route
+          path="/posts"
+          element={<PostList posts={posts} setPosts={setPosts} token={token} />}
+        />
       </Routes>
     </div>
   );
