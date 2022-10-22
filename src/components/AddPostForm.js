@@ -14,7 +14,7 @@ const AddPostForm = ({ token, setPosts }) => {
     setDescription(event.target.value);
   };
   const priceChangeHandler = (event) => {
-    setPrice(`${event.target.value}`);
+    setPrice(event.target.value);
   };
   const willDeliverChangeHandler = () => setWillDeliver(!willDeliver);
 
