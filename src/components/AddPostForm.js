@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { fetchCreatePost } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const AddPostForm = ({ token, setPosts }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [willDeliver, setWillDeliver] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
 
   const titleChangeHandler = (event) => {
     setTitle(event.target.value);
@@ -20,24 +23,27 @@ const AddPostForm = ({ token, setPosts }) => {
 
   const onAddFormSubmitHandler = async (event) => {
     event.preventDefault();
-    const result = await fetchCreatePost(
+    const { error, post } = await fetchCreatePost(
       token,
       title,
       description,
       price,
       willDeliver
     );
-    console.log("RESULT", result);
-    setPosts((prevPost) => [result, ...prevPost]);
-    setTitle("");
-    setDescription("");
-    setPrice(0);
-    setWillDeliver(false);
+    if (post) {
+      setPosts((prevPost) => [post, ...prevPost]);
+      setTitle("");
+      setDescription("");
+      setPrice(0);
+      setWillDeliver(false);
+      navigate("/posts");
+    }
+    setErrorMessage(error);
   };
 
   return (
     <form className="ui form" onSubmit={onAddFormSubmitHandler}>
-      <h1>Add A New Post</h1>
+      <h2>Create A New Post</h2>
       <div className="field">
         <label>Title</label>
         <input
@@ -53,7 +59,7 @@ const AddPostForm = ({ token, setPosts }) => {
         <input
           type="text"
           value={description}
-          placeholder="Description"
+          placeholder="A description of the post"
           required
           onChange={descriptionChangeHandler}
         />
@@ -63,7 +69,7 @@ const AddPostForm = ({ token, setPosts }) => {
         <input
           type="text"
           value={price}
-          placeholder="Description"
+          placeholder="Price"
           required
           onChange={priceChangeHandler}
         />
@@ -74,12 +80,14 @@ const AddPostForm = ({ token, setPosts }) => {
             type="checkbox"
             tabIndex="0"
             value={willDeliver}
-            placeholder="Description"
             onChange={willDeliverChangeHandler}
           />
           <label>Willing To Deliver?</label>
         </div>
       </div>
+      {errorMessage ? (
+        <p className="ui negative message">{errorMessage}</p>
+      ) : null}
       <button className="ui button" type="submit">
         CREATE
       </button>

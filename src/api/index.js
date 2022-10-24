@@ -165,27 +165,59 @@ export const fetchCreatePost = async (
   price,
   willDeliver
 ) => {
+  // try {
+  //   const response = await fetch(`${BASE_URL}/posts`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     body: JSON.stringify({
+  //       post: {
+  //         title,
+  //         description,
+  //         price,
+  //         willDeliver,
+  //       },
+  //     }),
+  //   });
+  //   console.log("THIS IS THE ADD POST RESPONSE --->", response);
+  //   const { data } = await response.json();
+  //   console.log("THIS IS THE ADD POST DATA --> ", data);
+  //   return data;
+  // } catch (error) {
+  //   console.error("There was an error adding post", error);
+  // }
   try {
-    const response = await fetch(`${BASE_URL}/posts`, {
+    const { success, error, data } = await callAPI("/posts", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
+      token: token,
+      body: {
         post: {
           title,
           description,
           price,
           willDeliver,
         },
-      }),
+      },
     });
-    console.log("THIS IS THE ADD POST RESPONSE --->", response);
-    const { data } = await response.json();
-    console.log("THIS IS THE ADD POST DATA --> ", data);
-    return data;
+    if (success) {
+      return {
+        error: null,
+        post: data.post,
+      };
+    } else {
+      return {
+        error: error.message,
+        post: null,
+      };
+    }
   } catch (error) {
-    console.error("There was an error adding post", error);
+    console.error("POST /posts failed: ", error);
+
+    return {
+      error: "Failed to create Post",
+      post: null,
+    };
   }
 };
