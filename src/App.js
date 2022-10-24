@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchPosts, fetchGuest } from "./api";
-import { PostList, AccountForm, Home } from "./components";
+import { PostList, AccountForm, Home, AddPostForm } from "./components";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import "./App.css";
@@ -16,12 +16,11 @@ const App = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      try {
-        const result = await fetchPosts();
-        setPosts(result);
-      } catch (error) {
-        console.error("There was an error fetching posts", error);
+      const { error, posts } = await fetchPosts();
+      if (error) {
+        console.error(error);
       }
+      setPosts(posts);
     };
     getPosts();
   }, []);
@@ -33,6 +32,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log("HERE");
     if (token) {
       const getGuest = async () => {
         const { username } = await fetchGuest(token);
@@ -44,7 +44,11 @@ const App = () => {
   }, [token]);
 
   useEffect(() => {
-    window.localStorage.setItem("token", token);
+    if (token) {
+      window.localStorage.setItem("token", token);
+    } else {
+      window.localStorage.removeItem("token");
+    }
   }, [token]);
 
   return (
@@ -79,6 +83,10 @@ const App = () => {
         <Route
           path="/account/:action"
           element={<AccountForm setToken={setToken} />}
+        />
+        <Route
+          path="/posts/create"
+          element={<AddPostForm token={token} setPosts={setPosts} />}
         />
         <Route
           path="/posts"

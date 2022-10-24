@@ -1,12 +1,14 @@
 import React from "react";
 import PostItem from "./PostItem";
-import AddPostForm from "./AddPostForm";
+import { Link } from "react-router-dom";
 
-const PostList = ({ posts, token, setPosts }) => {
+const PostList = ({ posts }) => {
   return (
     <div>
       <div>
-        <AddPostForm token={token} setPosts={setPosts} />
+        <Link to="/posts/create" className="ui button">
+          Create Post
+        </Link>
       </div>
       {posts.map((post) => {
         return <PostItem key={post._id} post={post} />;

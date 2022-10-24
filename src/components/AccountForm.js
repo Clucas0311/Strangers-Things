@@ -14,18 +14,14 @@ const SignUp = ({ setToken }) => {
   const passwordChangeHandler = (event) => setPassword(event.target.value);
 
   const onSubmitHandler = async (event) => {
-    console.log("SUBMIT");
     event.preventDefault();
-    try {
-      console.log("username", username, "password", password);
-      const { data } = await registerUser(username, password);
 
-      setToken(data.token);
+    console.log("username", username, "password", password);
+    const { error, token, message } = await registerUser(username, password);
+    console.error(error);
+    setToken(token);
+    if (token) {
       navigate("/");
-
-      console.log("data", data);
-    } catch (error) {
-      console.error(error);
     }
   };
   const title = action === "login" ? "Log In" : "Sign Up";

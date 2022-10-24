@@ -1,50 +1,160 @@
 export const BASE_URL =
   "https://strangers-things.herokuapp.com/api/2207-FTB-ET-WEB-PT";
 
-export const fetchPosts = async () => {
-  const response = await fetch(`${BASE_URL}/posts`);
-  console.log("---THIS IS THE RESPONSE OBJECT----", response);
-  const { data } = await response.json();
-  console.log("THIS IS DATA", data.posts);
-  return data.posts;
+const makeHeaders = (token) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+};
+
+const callAPI = async (endPointPath, defaultOptions = {}) => {
+  const { token, method, body } = defaultOptions;
+  const options = {
+    headers: makeHeaders(token),
+  };
+
+  if (method) {
+    options.method = method;
+  }
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(`${BASE_URL}${endPointPath}`, options);
+  const result = await response.json();
+
+  return result;
+};
+
+export const fetchPosts = async (token) => {
+  // const response = await fetch(`${BASE_URL}/posts`);
+  // console.log("---THIS IS THE RESPONSE OBJECT----", response);
+  // const { data } = await response.json();
+  // console.log("THIS IS DATA", data.posts);
+  // return data.posts;
+  try {
+    const { success, error, data } = await callAPI("/posts", {
+      token: token,
+    });
+    if (success) {
+      return {
+        error: null,
+        posts: data.posts,
+      };
+    } else {
+      return {
+        error: error.message,
+        posts: [],
+      };
+    }
+  } catch (error) {
+    console.error("There was an error fetching posts", error);
+    return {
+      error: "Failed to load Posts",
+      posts: [],
+    };
+  }
 };
 
 export const registerUser = async (username, password) => {
+  // try {
+  //   const response = await fetch(`${BASE_URL}/users/register`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       user: {
+  //         username,
+  //         password,
+  //       },
+  //     }),
+  //   });
+  //   const data = await response.json();
+  //   console.log("-------------data-------------->", data);
+  //   return data;
+  // } catch (error) {
+  //   console.error("There was an error registering user", error);
+  // }
+
   try {
-    const response = await fetch(`${BASE_URL}/users/register`, {
+    const { success, error, data } = await callAPI("/users/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+      body: {
         user: {
           username,
           password,
         },
-      }),
+      },
     });
-    const data = await response.json();
-    console.log("-------------data-------------->", data);
-    return data;
+    if (success) {
+      return {
+        error: null,
+        token: data.token,
+        message: data.message,
+      };
+    } else {
+      return {
+        error: error.message,
+        token: null,
+        message: null,
+      };
+    }
   } catch (error) {
-    console.error("There was an error registering user", error);
+    console.error("There was  an error registering the user", error);
+
+    return {
+      error: "Registration Failed",
+      token: null,
+      message: null,
+    };
   }
 };
 
 export const fetchGuest = async (token) => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/users/me`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log("--------------GETTING USER RESPONSE BODY ---->", response);
+  //     const { data } = await response.json();
+  //     console.log("USER DATA---------------->", data);
+  //     return data;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   try {
-    const response = await fetch(`${BASE_URL}/users/me`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    const { success, data, error } = await callAPI("/users/me", {
+      token: token,
     });
-    console.log("--------------GETTING USER RESPONSE BODY ---->", response);
-    const { data } = await response.json();
-    console.log("USER DATA---------------->", data);
-    return data;
+    console.log("success", success);
+
+    if (success) {
+      return {
+        error: null,
+        username: data.username,
+      };
+    } else {
+      return {
+        error: error.message,
+        username: null,
+      };
+    }
   } catch (error) {
-    console.log(error);
+    console.error("Failed to fetch guest", error);
+    return {
+      error: "Failed to load Guest Information",
+      user: null,
+    };
   }
 };
 
