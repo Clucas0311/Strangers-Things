@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registerUser } from "../api";
+import { registerUser, loginUser } from "../api";
 import { useParams, useNavigate } from "react-router-dom";
 
 const SignUp = ({ setToken }) => {
@@ -14,10 +14,11 @@ const SignUp = ({ setToken }) => {
   const passwordChangeHandler = (event) => setPassword(event.target.value);
 
   const onSubmitHandler = async (event) => {
+    const authFn = action === "register" ? registerUser : loginUser;
     event.preventDefault();
 
     console.log("username", username, "password", password);
-    const { error, token, message } = await registerUser(username, password);
+    const { error, token, message } = await authFn(username, password);
     console.error(error);
     setToken(token);
     if (token) {

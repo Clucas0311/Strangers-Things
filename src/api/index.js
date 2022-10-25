@@ -115,6 +115,40 @@ export const registerUser = async (username, password) => {
     };
   }
 };
+export const loginUser = async (username, password) => {
+  try {
+    const { success, error, data } = await callAPI("/users/login", {
+      method: "POST",
+      body: {
+        user: {
+          username,
+          password,
+        },
+      },
+    });
+    if (success) {
+      return {
+        error: null,
+        token: data.token,
+        message: data.message,
+      };
+    } else {
+      return {
+        error: error.message,
+        token: null,
+        message: null,
+      };
+    }
+  } catch (error) {
+    console.error("There was  an error logging in the user", error);
+
+    return {
+      error: "Log in failed",
+      token: null,
+      message: null,
+    };
+  }
+};
 
 export const fetchGuest = async (token) => {
   //   try {
