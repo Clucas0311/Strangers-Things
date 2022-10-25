@@ -1,7 +1,7 @@
 export const BASE_URL =
   "https://strangers-things.herokuapp.com/api/2207-FTB-ET-WEB-PT";
 
-const makeHeaders = (token) => {
+export const makeHeaders = (token) => {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -11,7 +11,7 @@ const makeHeaders = (token) => {
   return headers;
 };
 
-const callAPI = async (endPointPath, defaultOptions = {}) => {
+export const callAPI = async (endPointPath, defaultOptions = {}) => {
   const { token, method, body } = defaultOptions;
   const options = {
     headers: makeHeaders(token),
@@ -136,7 +136,7 @@ export const fetchGuest = async (token) => {
     const { success, data, error } = await callAPI("/users/me", {
       token: token,
     });
-    console.log("success", success);
+    console.log("success", data);
 
     if (success) {
       return {
@@ -153,7 +153,7 @@ export const fetchGuest = async (token) => {
     console.error("Failed to fetch guest", error);
     return {
       error: "Failed to load Guest Information",
-      user: null,
+      username: null,
     };
   }
 };
@@ -189,16 +189,17 @@ export const fetchCreatePost = async (
   //   console.error("There was an error adding post", error);
   // }
   try {
+    const post = {
+      title,
+      description,
+      price,
+      willDeliver,
+    };
     const { success, error, data } = await callAPI("/posts", {
-      method: "POST",
       token: token,
+      method: "POST",
       body: {
-        post: {
-          title,
-          description,
-          price,
-          willDeliver,
-        },
+        post: post,
       },
     });
     if (success) {
@@ -219,5 +220,19 @@ export const fetchCreatePost = async (
       error: "Failed to create Post",
       post: null,
     };
+  }
+};
+
+export const deletePost = async (token, postId) => {
+  try {
+    await fetch(`${BASE_URL}/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error(error);
   }
 };

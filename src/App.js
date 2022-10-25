@@ -8,25 +8,26 @@ import "./App.css";
 const App = () => {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState(
-    window.localStorage.getItem("token") || ""
+    window.localStorage.getItem("token") || null
   );
   const [guest, setGuest] = useState(null);
   const navigate = useNavigate();
+
   console.log("guest---->", guest);
 
   useEffect(() => {
     const getPosts = async () => {
-      const { error, posts } = await fetchPosts();
+      const { error, posts } = await fetchPosts(token);
       if (error) {
         console.error(error);
       }
       setPosts(posts);
     };
     getPosts();
-  }, []);
+  }, [token]);
 
   const logOut = () => {
-    setToken("");
+    setToken(null);
     setGuest(null);
     navigate("/");
   };
@@ -81,16 +82,16 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home guest={guest} />} />
         <Route
-          path="/account/:action"
-          element={<AccountForm setToken={setToken} />}
-        />
-        <Route
           path="/posts/create"
           element={<AddPostForm token={token} setPosts={setPosts} />}
         />
         <Route
           path="/posts"
           element={<PostList posts={posts} setPosts={setPosts} token={token} />}
+        />
+        <Route
+          path="/account/:action"
+          element={<AccountForm setToken={setToken} />}
         />
       </Routes>
     </div>

@@ -10,15 +10,10 @@ const AddPostForm = ({ token, setPosts }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
-  const titleChangeHandler = (event) => {
-    setTitle(event.target.value);
-  };
-  const descriptionChangeHandler = (event) => {
+  const titleChangeHandler = (event) => setTitle(event.target.value);
+  const descriptionChangeHandler = (event) =>
     setDescription(event.target.value);
-  };
-  const priceChangeHandler = (event) => {
-    setPrice(event.target.value);
-  };
+  const priceChangeHandler = (event) => setPrice(event.target.value);
   const willDeliverChangeHandler = () => setWillDeliver(!willDeliver);
 
   const onAddFormSubmitHandler = async (event) => {
@@ -30,15 +25,18 @@ const AddPostForm = ({ token, setPosts }) => {
       price,
       willDeliver
     );
+    console.log("CREATED POST", post.isAuthor);
     if (post) {
+      post.isAuthor = true;
       setPosts((prevPost) => [post, ...prevPost]);
       setTitle("");
       setDescription("");
       setPrice(0);
       setWillDeliver(false);
       navigate("/posts");
+    } else {
+      setErrorMessage(error);
     }
-    setErrorMessage(error);
   };
 
   return (
@@ -60,6 +58,7 @@ const AddPostForm = ({ token, setPosts }) => {
           type="text"
           value={description}
           placeholder="A description of the post"
+          autoComplete="off"
           required
           onChange={descriptionChangeHandler}
         />
@@ -71,6 +70,7 @@ const AddPostForm = ({ token, setPosts }) => {
           value={price}
           placeholder="Price"
           required
+          autoComplete="off"
           onChange={priceChangeHandler}
         />
       </div>
