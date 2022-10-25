@@ -224,15 +224,39 @@ export const fetchCreatePost = async (
 };
 
 export const deletePost = async (token, postId) => {
+  // try {
+  //   await fetch(`${BASE_URL}/posts/${postId}`, {
+  //     method: "DELETE",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  // }
+
   try {
-    await fetch(`${BASE_URL}/posts/${postId}`, {
+    const { success, error } = await callAPI(`/posts/${postId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      token: token,
     });
+    if (success) {
+      return {
+        error: null,
+        data: null,
+      };
+    } else {
+      return {
+        error: error.message,
+        data: null,
+      };
+    }
   } catch (error) {
-    console.error(error);
+    console.error("DELETE /posts/postId failed", error);
+    return {
+      error: "Failed to delete Post",
+      data: null,
+    };
   }
 };
