@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { fetchCreatePost } from "../api";
+import { updatePost } from "../api";
 import { useNavigate } from "react-router-dom";
 
-const AddPostForm = ({ token, setPosts }) => {
-  const navigate = useNavigate();
+const EditPostForm = ({ id, token, setPosts, setShowEdit, showEdit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -16,31 +15,35 @@ const AddPostForm = ({ token, setPosts }) => {
   const priceChangeHandler = (event) => setPrice(event.target.value);
   const willDeliverChangeHandler = () => setWillDeliver(!willDeliver);
 
-  const onAddFormSubmitHandler = async (event) => {
+  const onEditFormSubmitHandler = async (event) => {
     event.preventDefault();
-    const { error, post } = await fetchCreatePost(
+    const updatedPost = await updatePost(
+      id,
       token,
       title,
       description,
       price,
       willDeliver
     );
-
-    if (post) {
-      setPosts((prevPost) => [post, ...prevPost]);
-      setTitle("");
-      setDescription("");
-      setPrice(0);
-      setWillDeliver(false);
-      navigate("/posts");
-    } else {
-      setErrorMessage(error);
-    }
+    console.log("updatedPost", updatedPost);
+    setPosts((prevPosts) => {
+      return prevPosts.map((post) => {
+        if (post._id === id) {
+          return { ...post, ...updatedPost };
+        }
+        return post;
+      });
+    });
+    setTitle("");
+    setDescription("");
+    setPrice(0);
+    setWillDeliver(false);
+    setShowEdit(!showEdit);
   };
 
   return (
-    <form className="ui form" onSubmit={onAddFormSubmitHandler}>
-      <h2>Create A New Post</h2>
+    <form className="ui form" onSubmit={onEditFormSubmitHandler}>
+      <h2>Edit A New Post</h2>
       <div className="field">
         <label>Title</label>
         <input
@@ -88,10 +91,10 @@ const AddPostForm = ({ token, setPosts }) => {
         <p className="ui negative message">{errorMessage}</p>
       ) : null}
       <button className="ui button" type="submit">
-        CREATE
+        Edit Post
       </button>
     </form>
   );
 };
 
-export default AddPostForm;
+export default EditPostForm;

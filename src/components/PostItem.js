@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { deletePost } from "../api";
+import { EditPostForm } from "../components";
 import { Link } from "react-router-dom";
+import "./PostItem.css";
 
 const PostItem = ({ post, setPosts, token }) => {
+  const [showEdit, setShowEdit] = useState(false);
   console.log("post", post);
   // if (post.isAuthor) {
   //   post.messages = [
@@ -16,17 +19,39 @@ const PostItem = ({ post, setPosts, token }) => {
   //     },
   //   ];
   // }
+  const handleEditClick = () => {
+    setShowEdit(!showEdit);
+  };
   const handleDeleteClick = async (postId) => {
     await deletePost(token, postId);
     setPosts((prevPost) => prevPost.filter((post) => post._id !== postId));
   };
+
+  let content = <div className="center aligned header">{post.title}</div>;
+  if (showEdit) {
+    content = (
+      <EditPostForm
+        id={post._id}
+        token={token}
+        setPosts={setPosts}
+        setShowEdit={setShowEdit}
+        showEdit={showEdit}
+      />
+    );
+  }
   return (
     <div className="ui card">
       <div className="content">
         {post.isAuthor ? (
-          <div className="right floated aligend tiny header">Mine</div>
+          <i
+            onClick={() => handleEditClick()}
+            className="edit icon right floated aligned "
+          >
+            Mine
+          </i>
         ) : null}
-        <div className="center aligned header">{post.title}</div>
+        <div className="meta">{post.author.username}</div>
+        <div className="center aligned header">{content}</div>
         <div className="center aligned description">
           <p>{post.description}</p>
           <p>{post.price}</p>

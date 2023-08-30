@@ -258,17 +258,17 @@ export const fetchCreatePost = async (
 };
 
 export const deletePost = async (token, postId) => {
-  // try {
-  //   await fetch(`${BASE_URL}/posts/${postId}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  try {
+    await fetch(`${BASE_URL}/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 
   try {
     const { success, error } = await callAPI(`/posts/${postId}`, {
@@ -292,5 +292,42 @@ export const deletePost = async (token, postId) => {
       error: "Failed to delete Post",
       data: null,
     };
+  }
+};
+
+export const updatePost = async (
+  id,
+  token,
+  title,
+  description,
+  price,
+  location,
+  willDeliver
+) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        post: {
+          title,
+          description,
+          price,
+          location,
+          willDeliver,
+        },
+      }),
+    });
+    const result = await response.json();
+    console.log(result);
+    const {
+      data: { post },
+    } = result;
+    return post;
+  } catch (error) {
+    console.error(error, "There was an error editing post.");
   }
 };
