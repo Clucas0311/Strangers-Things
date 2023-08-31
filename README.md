@@ -1,1 +1,2 @@
-# Strangers-Things
+# Strangers Things
+- Basic Crud Application
