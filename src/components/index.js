@@ -4,3 +4,4 @@ export { default as PostItem } from "./PostItem";
 export { default as Home } from "./Home";
 export { default as AddPostForm } from "./AddPostForm";
 export { default as EditPostForm } from "./EditPostForm";
+export { default as PostDetails } from "../components/PostDetails";

@@ -18,6 +18,7 @@ const PostList = ({ posts, setPosts, token }) => {
               post={post}
               setPosts={setPosts}
               token={token}
+              showLink
             />
           );
         })}

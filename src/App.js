@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { fetchPosts, fetchGuest } from "./api";
-import { PostList, AccountForm, Home, AddPostForm } from "./components";
+import {
+  PostList,
+  AccountForm,
+  Home,
+  AddPostForm,
+  PostDetails,
+} from "./components";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import "./App.css";
@@ -88,6 +94,10 @@ const App = () => {
         <Route
           path="/posts"
           element={<PostList posts={posts} setPosts={setPosts} token={token} />}
+        />
+        <Route
+          path="/posts/:postId"
+          element={<PostDetails token={token} posts={posts} />}
         />
         <Route
           path="/account/:action"

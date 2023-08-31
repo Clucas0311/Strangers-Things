@@ -4,7 +4,7 @@ import { EditPostForm } from "../components";
 import { Link } from "react-router-dom";
 import "./PostItem.css";
 
-const PostItem = ({ post, setPosts, token }) => {
+const PostItem = ({ post, setPosts, token, showLink }) => {
   const [showEdit, setShowEdit] = useState(false);
   console.log("post", post);
   // if (post.isAuthor) {
@@ -58,7 +58,11 @@ const PostItem = ({ post, setPosts, token }) => {
         </div>
         <div className="extra-content">
           <div className="center aligned header">
-            <Link to="">View Location</Link>
+            {!showLink ? (
+              <Link to={"/posts"}>Go Back</Link>
+            ) : (
+              <Link to={`/posts/${post._id}`}>View Post </Link>
+            )}
           </div>
         </div>
         {post.isAuthor ? (
